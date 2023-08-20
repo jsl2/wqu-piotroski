@@ -7,9 +7,14 @@ Be creative! do whatever you want!
 - Start a web application
 - Import things from your .base module
 """
+import click
+import wqu_piotroski.adapter.za.share_data as za_share_data
+import wqu_piotroski.adapter.za.piotroski as za_piotroski
 
 
-def main():  # pragma: no cover
+@click.group()
+@click.pass_context
+def main(ctx):  # pragma: no cover
     """
     The main function executes on commands:
     `python -m wqu_piotroski` and `$ wqu_piotroski `.
@@ -25,4 +30,13 @@ def main():  # pragma: no cover
         * List all available tasks
         * Run an application (Flask, FastAPI, Django, etc.)
     """
-    print("This will do something")
+    ctx.ensure_object(dict)
+
+
+@main.command()
+@click.pass_context
+def get_data(ctx):
+    print("Getting top 40 historical price data for ZA from JSE")
+    za_share_data.get_all_share_data()
+    print("Getting top 40 historical piotroski scores for ZA from JSE")
+    za_piotroski.get_all_piotroski()
