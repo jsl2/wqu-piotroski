@@ -10,6 +10,8 @@ Be creative! do whatever you want!
 import click
 import wqu_piotroski.adapter.za.share_data as za_share_data
 import wqu_piotroski.adapter.za.piotroski as za_piotroski
+import wqu_piotroski.adapter.ind.share_data as ind_share_data
+import wqu_piotroski.adapter.ind.piotroski as ind_piotroski
 
 
 @click.group()
@@ -36,6 +38,10 @@ def main(ctx):  # pragma: no cover
 @main.command()
 @click.pass_context
 def get_data(ctx):
+    print("Getting BSE Sensex historical price data for IND from BSE")
+    print(ind_share_data.get_all_share_data())
+    print("Getting BSE Sensex historical piotroski scores for IND from BSE")
+    ind_piotroski.get_all_piotroski()
     print("Getting top 40 historical price data for ZA from JSE")
     za_share_data.get_all_share_data()
     print("Getting top 40 historical piotroski scores for ZA from JSE")

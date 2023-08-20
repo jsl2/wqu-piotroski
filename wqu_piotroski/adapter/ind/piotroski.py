@@ -1,14 +1,14 @@
 import requests
-from .share_data import get_stock_indices
+from .share_data import constituents
 import pickle
 
 
 def get_all_piotroski():
     piotroski_data = {}
-    for index in get_stock_indices():
+    for index in constituents:
         piotroski_data[index] = get_piotroski(index)
         print(f"Got data for {index}...")
-    with open("wqu_piotroski/data/za_piotroski_data.pickle", "wb") as f:
+    with open("wqu_piotroski/data/ind_piotroski_data.pickle", "wb") as f:
         pickle.dump(piotroski_data, f)
     return piotroski_data
 
@@ -33,7 +33,7 @@ def get_piotroski(ticker):
     json_data = {
         "query": "\nquery glossaryChart ($ticker: String!, $currency: String, $metric: String!, $period: String!) {\n  company (ticker: $ticker) {\n    glossary (currency: $currency, metric: $metric) {\n      chart(period: $period) {\n        subtype\n        type\n        metrics\n        full_tickers\n        data {\n          metric\n          metric_name\n          asset_name\n          values\n          period_dates\n          currency\n          ticker\n          full_ticker\n        }\n      }\n    }\n  }\n}\n",
         "variables": {
-            "ticker": f"JSE:{ticker}",
+            "ticker": f"BSE:{ticker}",
             "metric": "piotroski_score",
             "currency": "presentment",
             "period": "FY",
