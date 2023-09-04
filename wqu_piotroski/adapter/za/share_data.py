@@ -4,16 +4,52 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import pickle
 
+ZA_PICKLE_PATH = "wqu_piotroski/data/za_share_data.pickle"
 
-def get_stock_indices():
-    response = requests.get(
-        "https://www.sharedata.co.za/V2/Controls/Shares/ShareIndex/SIJSONData.aspx",
-        params={"indextype": "TOP40", "sortfield": "FULLNAME"},
-    )
-    soup = BeautifulSoup(response.content, "html.parser")
-    trs = soup.find_all("tr", class_="TableRowHighLight_OnHover")
-    indices = [tr.td.text for tr in trs]
-    return indices
+constituents = [
+    "JSE:BTI",
+    # "JSE:SAB",
+    "JSE:BHG",
+    "JSE:CFR",
+    "JSE:AGL",
+    "JSE:MTN",
+    "JSE:NPN",
+    "JSE:SOL",
+    "JSE:SBK",
+    "JSE:VOD",
+    "JSE:KIO",
+    "JSE:FSR",
+    # "JSE:OMU",
+    "JSE:ABG",
+    "JSE:SLM",
+    "JSE:SHP",
+    "JSE:REM",
+    "JSE:NED",
+    "JSE:APN",
+    "JSE:AMS",
+    "JSE:BVT",
+    "JSE:ANG",
+    "JSE:IMP",
+    "JSE:WHL",
+    "JSE:TBS",
+    # "JSE:MDC",
+    "JSE:EXX",
+    "JSE:RMH",
+    # "JSE:ITU",
+    "JSE:GRT",
+    "JSE:DSY",
+    "JSE:GFI",
+    "JSE:MNP",
+    "JSE:SNH",
+    # "JSE:ASR",
+    "JSE:INP",
+    # "JSE:MSM"
+    # "JSE:IPL",
+    "JSE:TRU",
+    "JSE:ARI",
+    "JSE:INL",
+    # "JSE:MND"
+]
 
 
 def get_share_data(ticker):
@@ -24,7 +60,7 @@ def get_share_data(ticker):
     share_data = {}
     for column in columns:
         response = requests.get(
-            json_data_url, params={"c": ticker, "All": "ALL", "p": column}
+            json_data_url, params={"c": ticker[4:], "All": "ALL", "p": column}
         )
         share_data[column] = response.json()
 
@@ -36,9 +72,9 @@ def get_share_data(ticker):
 
 def get_all_share_data():
     share_data = {}
-    for index in get_stock_indices():
+    for index in constituents:
         share_data[index] = get_share_data(index)
         print(f"Got data for {index}...")
-    with open("wqu_piotroski/data/za_share_data.pickle", "wb") as f:
+    with open(ZA_PICKLE_PATH, "wb") as f:
         pickle.dump(share_data, f)
     return share_data

@@ -1,17 +1,4 @@
-"""
-wqu_piotroski base module.
-
-This is the principal module of the wqu_piotroski project.
-here you put your main classes and objects.
-
-Be creative! do whatever you want!
-
-If you want to replace this with a Flask application run:
-
-    $ make init
-
-and then choose `flask` as template.
-"""
+from .data_cleaner import load_data
 
 # example constant variable
 NAME = "wqu_piotroski"

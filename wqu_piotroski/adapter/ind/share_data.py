@@ -4,6 +4,8 @@ import requests
 import pandas as pd
 import pickle
 
+IND_PICKLE_PATH = "wqu_piotroski/data/ind_share_data.pickle"
+
 constituents = [
     "500010",
     "500087",
@@ -39,6 +41,10 @@ constituents = [
 
 
 def get_share_data(scripcode):
+    headers = {}
+
+    assert len(headers) > 0, "Get headers for graph request from bse "
+    "https://www.bseindia.com/stock-share-price/"
     params = {
         "scripcode": scripcode,
         "flag": "1",
@@ -50,6 +56,7 @@ def get_share_data(scripcode):
     response = requests.get(
         "https://api.bseindia.com/BseIndiaAPI/api/StockReachGraph/w",
         params=params,
+        headers=headers,
     )
     data = response.json()
     data = json.loads(data["Data"])
@@ -64,6 +71,6 @@ def get_all_share_data():
     for code in constituents:
         share_data[code] = get_share_data(code)
         print(f"Got data for {code}...")
-    with open("wqu_piotroski/data/ind_share_data.pickle", "wb") as f:
+    with open(IND_PICKLE_PATH, "wb") as f:
         pickle.dump(share_data, f)
     return share_data

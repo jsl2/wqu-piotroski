@@ -2,25 +2,23 @@ import requests
 from .share_data import constituents
 import pickle
 
+IND_PIOTROSKI_PATH = "wqu_piotroski/data/ind_piotroski_data.pickle"
+
 
 def get_all_piotroski():
     piotroski_data = {}
     for index in constituents:
         piotroski_data[index] = get_piotroski(index)
         print(f"Got data for {index}...")
-    with open("wqu_piotroski/data/ind_piotroski_data.pickle", "wb") as f:
+    with open(IND_PIOTROSKI_PATH, "wb") as f:
         pickle.dump(piotroski_data, f)
     return piotroski_data
 
 
 def get_piotroski(ticker):
-    cookies = {
-        # login to finbox.com and paste cookies from request here
-    }
+    cookies = {}
 
-    headers = {
-        # login to finbox.com and paste headers from request here
-    }
+    headers = {}
 
     assert (
         len(cookies) > 0
@@ -36,7 +34,7 @@ def get_piotroski(ticker):
             "ticker": f"BSE:{ticker}",
             "metric": "piotroski_score",
             "currency": "presentment",
-            "period": "FY",
+            "period": "FQ",
         },
     }
 
